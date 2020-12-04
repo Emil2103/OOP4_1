@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OOP4_1
 {
-    class CCircle
+    public class CCircle
     {
         public int x, y, index;
         
