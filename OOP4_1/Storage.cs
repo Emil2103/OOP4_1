@@ -8,31 +8,32 @@ namespace OOP4_1
 {
     public class Storage
     {
-        private int count;
-        private int size;
-        private CCircle[] circle; 
-
+        public int count;
+        public int size;
+        public CCircle[] circle; 
+         
         public Storage(int size)
         {
             this.size = size;
             count = 0;
             circle = new CCircle[size];
-
             for (int i = 0; i < size; i++)
             {
                 circle[i] = null;
             }
         }
 
-        public void addCCircle(CCircle t, int i)
+        public void addCCircle(CCircle t)
         {
-            if (i < size && circle[i] == null)
-            {
-                circle[i] = t;
-                count++;
+            for (int i = 0; i < size; i++) {
+                if (circle[i] == null)
+                {
+                    circle[i] = t;
+                    count++;
+                    break;
+                }
             }
-            else
-                Console.WriteLine("Ошибка void addObject(Object* t, int i)");
+            
         }
 
         public CCircle getCCircle(int i)

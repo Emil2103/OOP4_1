@@ -12,34 +12,90 @@ namespace OOP4_1
 {
     public partial class Form1 : Form
     {
-        DrawVert V;
-        List<CCircle> C;
-        int selected;
-
+        Graphics G;
+        Storage S;
+        Bitmap bitmap;
+        bool ctrlPress = false;
+        
         public Form1()
         {
             InitializeComponent();
-            C = new List<CCircle>();
-            V = new DrawVert(sheet.Width, sheet.Height);
-            sheet.Image = V.GetBitmap();
+            S = new Storage(100);
+            bitmap = new Bitmap(sheet.Width, sheet.Height);
+            G = Graphics.FromImage(bitmap);
+            sheet.Image = bitmap;
         }
 
         private void sheet_MouseClick(object sender, MouseEventArgs e)
         {
-            C.Add(new CCircle(e.X, e.Y, C.Count() + 1));
-            V.drawVertex(e.X, e.Y);
-            sheet.Image = V.GetBitmap();
-
-            for(int i = 0; i < C.Count; i++)
+            if (e.Button == MouseButtons.Left)
             {
-                if (Math.Pow((C[i].x - e.X), 2) + Math.Pow((C[i].y - e.Y), 2) <= V.R * V.R)
+                for (int i = 0; i < S.getsize(); i++)
                 {
-                    
-                        V.drawSelectedVertex(C[i].x, C[i].y);
-                        sheet.Image = V.GetBitmap();
-                    
-                }
+                    if (S.circle[i] != null)
+                    {
+                        CCircle current = S.circle[i];
+                        if (S.circle[i].Popal(e.X, e.Y))
+                        {
+                            if (!ctrlPress)
+                            {
+                                unselectedAll();
+                            }
+                            current.popal = (current.popal ? false : true);
+                            this.Invalidate();
+                            return;
+                        }
+                    }
+                } 
+                unselectedAll();
+                CCircle newCircle = new CCircle(e.X, e.Y);
+                S.addCCircle(newCircle);
+                this.Invalidate();
             }
         }
+
+        private void sheet_Paint(object sender, PaintEventArgs e)
+        {
+            G.Clear(Color.White);
+            for(int i = 0; i < S.getsize(); i++)
+            {
+                if (S.circle[i] != null)
+                    S.circle[i].DrawCCircle(G);
+            }
+            sheet.Image = bitmap;
+        }
+
+        private void unselectedAll()
+        {
+            for(int i = 0; i < S.getsize(); i++)
+            {
+                if(S.circle[i] != null)
+                   S.circle[i].popal = false;
+            }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control)
+                ctrlPress = true;
+            if(e.KeyCode == Keys.Delete)
+            {
+                for(int i = 0; i < S.getsize(); i++)
+                {
+                    if (S.circle[i] != null && S.circle[i].popal)
+                    {
+                        S.deleteCCircle(i);
+                    }
+                }
+                this.Invalidate();
+            }
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            ctrlPress = false;
+        }
+
+        
     }
 }

@@ -39,6 +39,7 @@
             this.sheet.Size = new System.Drawing.Size(775, 425);
             this.sheet.TabIndex = 0;
             this.sheet.TabStop = false;
+            this.sheet.Paint += new System.Windows.Forms.PaintEventHandler(this.sheet_Paint);
             this.sheet.MouseClick += new System.Windows.Forms.MouseEventHandler(this.sheet_MouseClick);
             // 
             // Form1
@@ -49,6 +50,9 @@
             this.Controls.Add(this.sheet);
             this.Name = "Form1";
             this.Text = "Form1";
+            
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             ((System.ComponentModel.ISupportInitialize)(this.sheet)).EndInit();
             this.ResumeLayout(false);
 
